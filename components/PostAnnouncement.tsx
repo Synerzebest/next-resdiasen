@@ -153,7 +153,7 @@ export default function PostAnnouncement() {
                         <Spin indicator={<LoadingOutlined spin />} />
                     </div>
                     ) : (
-                    announcements.map((announcement, index) => {
+                    announcements.map((announcement) => {
                         const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "2-digit",
@@ -166,7 +166,7 @@ export default function PostAnnouncement() {
                             <Card
                                 // <Image src={announcement.userImageUrl} alt="user profile picture" width={30} height={30} />
                                 title={`${announcement.author}`}
-                                key={index}
+                                key={announcement.id}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[
                                     <Button
@@ -195,7 +195,7 @@ export default function PostAnnouncement() {
                                             {commentLoading ? (
                                                 <Spin indicator={<LoadingOutlined spin />} className="my-4"/>
                                             ) : comments.length === 0 ? (
-                                                <p className="py-4">Il n'y a pas encore de commentaires</p>
+                                                <p className="py-4">Il n&apos;y a pas encore de commentaires</p>
                                             ) : (
                                                 comments.map((comment: any, index: number) => (
                                                     <div key={index} className="max-w-[300px] my-4 p-2 shadow rounded-lg flex flex-col gap-4">
