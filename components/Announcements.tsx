@@ -5,7 +5,6 @@ import { Card, Spin, Input, Button } from 'antd';
 import { z, ZodError } from "zod";
 import { CommentOutlined, ShareAltOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useUser } from '@clerk/nextjs';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { IComment } from '@/models/Comment';
 
@@ -14,7 +13,6 @@ const { TextArea } = Input;
 export default function Announcements() {
     const [announcements, setAnnouncements] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
-    const router = useRouter()
 
 
     const announcementSchema = z.object({
@@ -85,7 +83,7 @@ export default function Announcements() {
             }
         }
         fetchAnnouncements();
-    }, []);
+    }, [announcementSchema]);
 
     const [comments, setComments] = useState<any[]>([]);
     const [commentLoading, setCommentLoading] = useState(false);
@@ -176,8 +174,21 @@ export default function Announcements() {
     
                         return (
                             <Card
-                                // <Image src={announcement.userImageUrl} alt="user profile picture" width={30} height={30} />
-                                title={`${announcement.author}`}
+                                title={
+                                    <div className="flex items-center">
+                                        {announcement.userImageUrl && (
+                                            <div className="rounded-full overflow-hidden mr-2">
+                                                <Image
+                                                    src={announcement.userImageUrl}
+                                                    alt="user profile picture"
+                                                    width={30}
+                                                    height={30}
+                                                />
+                                            </div>
+                                        )}
+                                        <span>{announcement.author}</span>
+                                    </div>
+                                }
                                 key={index}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[

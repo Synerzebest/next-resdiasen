@@ -76,7 +76,7 @@ export default function PostAnnouncement() {
             }
         }
         fetchAnnouncements();
-    }, [isLoaded, isSignedIn, user]);
+    }, [isLoaded, isSignedIn, user, announcementSchema]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
