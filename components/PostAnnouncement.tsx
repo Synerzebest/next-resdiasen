@@ -164,8 +164,21 @@ export default function PostAnnouncement() {
     
                         return (
                             <Card
-                                // <Image src={announcement.userImageUrl} alt="user profile picture" width={30} height={30} />
-                                title={`${announcement.author}`}
+                                title={
+                                    <div className="flex items-center">
+                                        {announcement.userImageUrl && (
+                                            <div className="rounded-full overflow-hidden mr-2">
+                                                <Image
+                                                    src={announcement.userImageUrl}
+                                                    alt="user profile picture"
+                                                    width={30}
+                                                    height={30}
+                                                />
+                                            </div>
+                                        )}
+                                        <span>{announcement.author}</span>
+                                    </div>
+                                }
                                 key={announcement.id}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[

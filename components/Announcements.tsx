@@ -159,7 +159,7 @@ export default function Announcements() {
                         <Spin indicator={<LoadingOutlined spin />} />
                     </div>
                 ) : (
-                    announcements.map((announcement, index) => {
+                    announcements.map((announcement) => {
                         const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "2-digit",
