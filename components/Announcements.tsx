@@ -205,7 +205,7 @@ export default function Announcements() {
                                         className="border-none shadow-none"
                                     >
                                     <Button
-                                        key="commentButton"
+                                        key="shareButton"
                                         onClick={() => {
                                             if (postId === announcement.id) {
                                                 setPostId('');
@@ -235,7 +235,7 @@ export default function Announcements() {
                                             {commentLoading ? (
                                                 <Spin indicator={<LoadingOutlined spin className="my-4" />} />
                                             ) : comments.length === 0 ? (
-                                                <p className="py-4">Il n'y a pas encore de commentaires</p>
+                                                <p className="py-4">Il n&apos;y a pas encore de commentaires</p>
                                             ) : (
                                                 comments.map((comment: any, index: number) => (
                                                     <div key={index} className="max-w-[300px] my-4 p-2 shadow rounded-lg flex flex-col gap-4">
@@ -269,7 +269,7 @@ export default function Announcements() {
                 )}
             </div>
             <div className="pt-[50px]">
-                <p>Scrollez pour voir plus d'annonces</p>
+                <p>Scrollez pour voir plus d&apos;annonces</p>
             </div>
     
         </div>
