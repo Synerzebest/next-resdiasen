@@ -121,10 +121,6 @@ export default function Announcements() {
     const author = user?.fullName
     const userImageUrl = user?.imageUrl
 
-    // if (!isLoaded || !isSignedIn || !user) {
-    //     router.push('/auth/signin');
-    //     return null;
-    // }
 
     async function handleSubmit(postId: string) {
         try {
@@ -189,7 +185,7 @@ export default function Announcements() {
                                         <span>{announcement.author}</span>
                                     </div>
                                 }
-                                key={index}
+                                key={announcement.id}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[
                                     <Button
