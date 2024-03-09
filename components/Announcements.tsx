@@ -233,8 +233,8 @@ export default function Announcements() {
                                             ) : comments.length === 0 ? (
                                                 <p className="py-4">Il n&apos;y a pas encore de commentaires</p>
                                             ) : (
-                                                comments.map((comment: any, index: number) => (
-                                                    <div key={index} className="max-w-[300px] my-4 p-2 shadow rounded-lg flex flex-col gap-4">
+                                                comments.map((comment: any) => (
+                                                    <div key={comment.id} className="max-w-[300px] my-4 p-2 shadow rounded-lg flex flex-col gap-4">
                                                         <div className="flex items-center gap-2">
                                                             <Image alt='user profile picture' src={comment.userImageUrl} width={30} height={30} className="rounded-full" />
                                                             <p className="text-xl">{comment.author}</p>
