@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from 'react';
-import { Card, Spin, Input, Button } from 'antd';
-import { CommentOutlined, ShareAltOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
+import { Spin, Input } from 'antd';
+import { CommentOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
 import { PiSmileySad, PiSmiley, PiSmileyMeh } from "react-icons/pi";
 import { useUser } from '@clerk/nextjs';
 import Image from 'next/image';
