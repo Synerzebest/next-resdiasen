@@ -39,7 +39,7 @@ export default function Announcements() {
                         <Spin indicator={<LoadingOutlined spin />} />
                     </div>
                 ) : (
-                    announcements.map((announcement) => {
+                    announcements.map((announcement, index) => {
                         const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "2-digit",
@@ -50,6 +50,7 @@ export default function Announcements() {
     
                         return (
                             <Card
+                                key={announcement.id || index}
                                 title={
                                     <div className="flex items-center">
                                         {announcement.userImageUrl && (
@@ -65,7 +66,6 @@ export default function Announcements() {
                                         <span>{announcement.author}</span>
                                     </div>
                                 }
-                                key={announcement.id}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[
                                     <Button
