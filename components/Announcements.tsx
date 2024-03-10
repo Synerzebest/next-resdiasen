@@ -32,7 +32,7 @@ export default function Announcements() {
         <div className="relative top-44 w-11/12 m-auto flex flex-col gap-4 h-auto pb-12">
             <p className="text-3xl sm:text-4xl text-blue-900 font-bold">Découvrez les nouveautés</p>
     
-            <div className="w-full mt-12 flex flex-col items-center gap-4 min-h-[300px] max-h-[800px] overflow-y-scroll shadow-b">
+            <div className="w-full mt-12 flex flex-col items-center gap-4 min-h-[300px] max-h-[800px] overflow-y-scroll">
                 {loading ? ( 
                     <div className="w-full flex flex-row gap-4 items-center pt-6">
                         <p className="text-lg">Chargement</p>
@@ -49,21 +49,23 @@ export default function Announcements() {
                         });
     
                         return (
-                            <div key={announcement.id || index} className="w-full sm:w-11/16 md:w-3/4 shadow min-h-[200px] flex flex-col justify-between gap-4 p-4 rounded-lg">
-                                <div className="flex items-center gap-2">
-                                    {announcement.userImageUrl && (
-                                        <div className="rounded-full overflow-hidden mr-2">
-                                            <Image
-                                                src={announcement.userImageUrl}
-                                                width={30}
-                                                height={30}
-                                                alt="user logo"
-                                            />
-                                        </div>
-                                    )}
-                                    <p className="text-2xl">{announcement.author}</p>
+                            <div key={announcement.id || index} className="w-full sm:w-11/16 md:w-3/4 shadow-lg h-auto flex flex-col justify-between p-4 rounded-lg">
+                                <div className="flex flex-col gap-[10px]">
+                                    <div className="flex items-center gap-2 py-[5px]">
+                                        {announcement.userImageUrl && (
+                                            <div className="rounded-full overflow-hidden mr-2">
+                                                <Image
+                                                    src={announcement.userImageUrl}
+                                                    width={30}
+                                                    height={30}
+                                                    alt="user logo"
+                                                />
+                                            </div>
+                                        )}
+                                        <p className="text-2xl">{announcement.author}</p>
+                                    </div>
+                                    <hr className="w-full py-[10px]"></hr>
                                 </div>
-                                <hr className="w-full py-[10px]"></hr>
                                 <div className="min-h-[80px]">
                                     <p>{announcement.text}</p>
                                     {postId === announcement.id && (
@@ -95,32 +97,35 @@ export default function Announcements() {
                                                     ))
                                                 )}
                                             </div>
-                                            <Input.TextArea rows={3} value={newComment} onChange={(e) => setNewComment(e.target.value)} />
-                                            <button type="submit" className="bg-blue-500 text-white flex items-center justify-center gap-2 p-2 mt-4 rounded" onClick={() => handleCommentSubmission(announcement.id)}>Publier <SendOutlined /></button>
+                                            <div className="py-4">
+                                                <Input.TextArea rows={3} value={newComment} onChange={(e) => setNewComment(e.target.value)} />
+                                                <button type="submit" className="bg-blue-500 text-white flex items-center justify-center gap-2 p-2 mt-4 rounded" onClick={() => handleCommentSubmission(announcement.id)}>Publier <SendOutlined /></button>
+                                            </div>
                                         </div>
                                     )}
                                 </div>
-                                <hr className="w-full"></hr>
-                                <div className="flex justify-evenly">
-                                    <div className="flex items-center gap-2">
-                                        <button className="border-none shadow-none outline-none" onClick={() => {
-                                            if (postId === announcement.id) {
-                                                setPostId('');
-                                            } else {
-                                                setPostId(announcement.id);
-                                                handleFetchComments(announcement.id);
-                                            }
-                                        }}>
-                                            <CommentOutlined />
-                                        </button>
-                                        <p>{announcement.commentCount ?? 0}</p> 
+                                <div className="flex flex-col gap-[10px]">
+                                    <hr className="w-full"></hr>
+                                    <div className="flex justify-evenly">
+                                        <div className="flex items-center gap-2">
+                                            <button className="border-none shadow-none outline-none" onClick={() => {
+                                                if (postId === announcement.id) {
+                                                    setPostId('');
+                                                } else {
+                                                    setPostId(announcement.id);
+                                                    handleFetchComments(announcement.id);
+                                                }
+                                            }}>
+                                                <CommentOutlined />
+                                            </button>
+                                        </div>
+                                        <div className="flex gap-2 items-center">
+                                            <p className="hover:text-red-500 hover:cursor-pointer text-lg"><PiSmileySad /></p>  
+                                            <p className="hover:text-yellow-500 hover:cursor-pointer text-lg"><PiSmileyMeh /></p> 
+                                            <p className="hover:text-green-500 hover:cursor-pointer text-lg"><PiSmiley /></p>     
+                                        </div>
+                                        <p className="text-gray-500 text-sm">{formattedDate}</p>
                                     </div>
-                                    <div className="flex gap-2">
-                                        <p className="hover:text-red-500"><PiSmileySad /></p>  
-                                        <p className="hover:text-green-500"><PiSmileyMeh /></p> 
-                                        <p className="hover:text-yellow-500"><PiSmiley /></p>     
-                                    </div>
-                                    <p className="text-gray-500 text-sm">{formattedDate}</p>
                                 </div>
                             </div>
                         );

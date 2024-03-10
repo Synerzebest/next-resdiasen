@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { z, ZodError } from 'zod';
-import { IComment } from '@/models/Comment';
 
 type Announcement = {
     id: string;
@@ -8,7 +7,6 @@ type Announcement = {
     text: string;
     date: string;
     userImageUrl?: string;
-    commentCount: number;
 };
 
 export function useAnnouncements() {
@@ -30,27 +28,7 @@ export function useAnnouncements() {
                 }
                 const data: any[] = await response.json();
 
-                const announcementsWithCommentCount = await Promise.all(data.map(async (announcement: any) => {
-                    try {
-                        const commentsResponse = await fetch(`/api/getComments?postId=${announcement.id}`);
-                        if (!commentsResponse.ok) {
-                            throw new Error('An error occurred while fetching the comments');
-                        }
-                        const commentsData: IComment[] = await commentsResponse.json();
-                        return {
-                            ...announcement,
-                            commentCount: commentsData.length
-                        };
-                    } catch (error) {
-                        console.error('Error fetching comments for announcement:', error);
-                        return {
-                            ...announcement,
-                            commentCount: 0
-                        };
-                    }
-                }));
-
-                const validatedAnnouncements = announcementsWithCommentCount.filter((announcement: any) => {
+                const validatedAnnouncements = data.map((announcement: any) => {
                     try {
                         announcementSchema.parse(announcement);
 
@@ -67,12 +45,11 @@ export function useAnnouncements() {
                         if (error instanceof ZodError) {
                             console.error('Invalid announcement:', error);
                         }
-                        return false;
+                        return null;
                     }
-                });
+                }).filter(Boolean) as Announcement[];
 
                 const sortedAnnouncements = validatedAnnouncements.reverse();
-
                 setAnnouncements(sortedAnnouncements);
                 setLoading(false);
             } catch (error) {
