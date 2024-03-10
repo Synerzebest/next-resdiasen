@@ -3,10 +3,11 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import { useUser } from '@clerk/nextjs';
 import toast, {Toaster} from 'react-hot-toast';
-import { z, ZodError } from 'zod';
 import { Card, Spin, Input, Button } from 'antd';
 import { CommentOutlined, ShareAltOutlined, SendOutlined, LoadingOutlined } from '@ant-design/icons';
 import Image from 'next/image';
+import { useAnnouncements } from '@/utils/useAnnouncements';
+import { fetchComments, handleSubmitComment } from '@/utils/useComments';
 
 
 const { TextArea } = Input;
@@ -15,68 +16,16 @@ const { TextArea } = Input;
 export default function PostAnnouncement() {
     const [query, setQuery] = useState('');
     const [isPosting, setIsPosting] = useState(false);
-    const [announcements, setAnnouncements] = useState<any[]>([]);
-    const { user, isLoaded, isSignedIn } = useUser();
-    const [loading, setLoading] = useState(true);
-    const author = user?.fullName;
-    const userImageUrl = user?.imageUrl;
+    const { announcements, loading } = useAnnouncements();
+    const { user } = useUser();
+    const author = user?.fullName || "";
+    const userImageUrl = user?.imageUrl || "";
     const userId = user?.id;
     const [comments, setComments] = useState<any[]>([]);
     const [commentLoading, setCommentLoading] = useState(false);
     const [newComment, setNewComment] = useState('');
     const [postId, setPostId] = useState<string>('');
 
-    const announcementSchema = z.object({
-        author: z.string(),
-        text: z.string(),
-        date: z.string()
-    });
-
-    type Announcement = z.infer<typeof announcementSchema>;
-
-    useEffect(() => {
-        async function fetchAnnouncements() {
-            try {
-                if (!isLoaded || !isSignedIn || !user) {
-                    return;
-                }
-
-                const response = await fetch('/api/announcements');
-                if (!response.ok) {
-                    throw new Error('An error occurred while fetching the announcements');
-                }
-                const data = await response.json();
-
-                const userAnnouncements = data.filter((announcement: any) => {
-                    try {
-                        announcementSchema.parse(announcement);
-                        const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                        });
-                        // Comparez l'ID de l'utilisateur avec l'ID de l'auteur de l'annonce
-                        return announcement.userId === user.id;
-                    } catch (error) {
-                        if (error instanceof ZodError) {
-                            console.error('Invalid announcement:', error);
-                        }
-                        return false;
-                    }
-                });
-
-                userAnnouncements.sort((a: Announcement, b: Announcement) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-                setAnnouncements(userAnnouncements);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching announcements:', error);
-            }
-        }
-        fetchAnnouncements();
-    }, [isLoaded, isSignedIn, user, announcementSchema]);
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -113,20 +62,12 @@ export default function PostAnnouncement() {
         return () => clearTimeout();
     }, []);
 
-    async function fetchComments(postId: string) {
-        setCommentLoading(true);
-        try {
-            const response = await fetch(`/api/getComments?postId=${postId}`);
-            if (!response.ok) {
-                throw new Error('An error occurred while fetching the comments');
-            }
-            const data = await response.json();
-            setComments(data);
-        } catch (error) {
-            console.error('Error fetching comments:', error);
-        } finally {
-            setCommentLoading(false);
-        }
+    async function handleFetchComments(postId: string) {
+        await fetchComments(postId, setComments, setCommentLoading);
+    }
+
+    async function handleCommentSubmission(postId: string) {
+        await handleSubmitComment(postId, newComment, author, userImageUrl, setNewComment, setComments, setCommentLoading);
     }
 
 
@@ -189,7 +130,7 @@ export default function PostAnnouncement() {
                                                 setPostId('');
                                             } else {
                                                 setPostId(announcement.id);
-                                                fetchComments(announcement.id);
+                                                handleFetchComments(announcement.id);
                                             }
                                         }}
                                         className="border-none shadow-none text-gray-500"
@@ -232,7 +173,7 @@ export default function PostAnnouncement() {
                                             )}
                                         </div>
                                         <Input.TextArea rows={3} value={newComment} onChange={(e) => setNewComment(e.target.value)} maxLength={300} />
-                                        <button type="submit" className="bg-blue-500 text-white flex items-center justify-center gap-2 p-2 mt-4 rounded" onClick={() => handleSubmit(announcement.id)}>Publier <SendOutlined /></button>
+                                        <button type="submit" className="bg-blue-500 text-white flex items-center justify-center gap-2 p-2 mt-4 rounded" onClick={() => handleCommentSubmission(announcement.id)}>Publier <SendOutlined /></button>
                                     </div>
                                 )}
     
