@@ -32,22 +32,7 @@ export default function Announcements() {
             <p className="text-3xl sm:text-4xl text-blue-900 font-bold">Découvrez les nouveautés</p>
     
             <div className="w-full mt-12 flex flex-col items-center gap-4 min-h-[300px] max-h-[800px] overflow-y-scroll shadow-b">
-                <p>test</p>
-                { loading ? ( 
-                    <div className="w-full flex flex-row gap-4 items-center pt-6">
-                        <p className="text-lg">Chargement</p>
-                        <Spin indicator={<LoadingOutlined spin />} />
-                    </div>
-                ) : (
-                    announcements.map((announcement) => {
-                        return(
-                            <div key={announcement.id}>
-                                <p>test</p>
-                            </div>
-                        )
-                    }))
-                }
-                {/* {loading ? ( 
+                {loading ? ( 
                     <div className="w-full flex flex-row gap-4 items-center pt-6">
                         <p className="text-lg">Chargement</p>
                         <Spin indicator={<LoadingOutlined spin />} />
@@ -63,8 +48,9 @@ export default function Announcements() {
                         });
     
                         return (
+                            <div key={announcement.id || index}>
                             <Card
-                                key={announcement.id || index}
+                                
                                 title={
                                     <div className="flex items-center">
                                         {announcement.userImageUrl && (
@@ -153,9 +139,10 @@ export default function Announcements() {
                                 )}
     
                             </Card>
+                            </div>
                         );
                     })
-                )} */}
+                )}
             </div>
             <div className="pt-[50px]">
                 <p>Scrollez pour voir plus d&apos;annonces</p>
