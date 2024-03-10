@@ -94,7 +94,7 @@ export default function PostAnnouncement() {
                         <Spin indicator={<LoadingOutlined spin />} />
                     </div>
                     ) : (
-                    announcements.map((announcement) => {
+                    announcements.map((announcement, index) => {
                         const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
                             day: "2-digit",
                             month: "2-digit",
@@ -105,6 +105,7 @@ export default function PostAnnouncement() {
     
                         return (
                             <Card
+                                key={announcement.id || index}
                                 title={
                                     <div className="flex items-center">
                                         {announcement.userImageUrl && (
@@ -120,7 +121,6 @@ export default function PostAnnouncement() {
                                         <span>{announcement.author}</span>
                                     </div>
                                 }
-                                key={announcement.id}
                                 className="w-full sm:w-11/16 md:w-3/4"
                                 actions={[
                                     <Button
@@ -158,7 +158,6 @@ export default function PostAnnouncement() {
                                                             <p className="text-xl">{comment.author}</p>
                                                         </div>
                                                         <p className="text-lg">{comment.content}</p>
-                                                        {/* FormattedDate */}
                                                         <p className="text-sm text-gray-500 italic">
                                                             {new Date(comment.date).toLocaleDateString("fr-FR", {
                                                                 day: "2-digit",
