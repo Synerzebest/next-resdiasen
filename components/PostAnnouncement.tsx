@@ -58,10 +58,6 @@ export default function PostAnnouncement() {
         setQuery(e.target.value);
     };
 
-    useEffect(() => {
-        return () => clearTimeout();
-    }, []);
-
     async function handleFetchComments(postId: string) {
         await fetchComments(postId, setComments, setCommentLoading);
     }
