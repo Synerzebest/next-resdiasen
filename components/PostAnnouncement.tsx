@@ -91,7 +91,9 @@ export default function PostAnnouncement() {
                         <p className="text-lg">Chargement</p>
                         <Spin indicator={<LoadingOutlined spin />} />
                     </div>
-                ) : (
+                    ) : announcements.length === 0 ? (
+                        <p className="py-4">Vous n&apos;avez posté aucune annonce</p>
+                    ) : (
                     announcements.map((announcement, index) => {
                         const formattedDate = new Date(announcement.date).toLocaleDateString("fr-FR", {
                             day: "2-digit",
